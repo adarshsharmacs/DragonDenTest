@@ -1,0 +1,45 @@
+<div class="h-full w-64 bg-cibc-slate text-white flex flex-col shadow-xl">
+  <!-- Logo Area -->
+  <div class="p-6 border-b border-gray-700 flex items-center space-x-3">
+    <div class="w-8 h-8 bg-cibc-maroon rounded-md flex items-center justify-center">
+      <span class="font-bold text-white text-lg">C</span>
+    </div>
+    <span class="text-xl font-semibold tracking-tight">Classify</span>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex-1 p-4 space-y-2">
+    <!-- Smart Discovery -->
+    <a routerLink="/discovery" routerLinkActive="bg-cibc-maroon text-white shadow-md"
+      class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-all duration-200 group">
+      <lucide-icon [img]="icons.Database" class="w-5 h-5 group-hover:scale-110 transition-transform"></lucide-icon>
+      <span class="font-medium">Smart Discovery</span>
+    </a>
+
+    <!-- Intelligent Roadmap -->
+    <a routerLink="/roadmap" routerLinkActive="bg-cibc-maroon text-white shadow-md"
+      class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-all duration-200 group">
+      <lucide-icon [img]="icons.Calendar" class="w-5 h-5 group-hover:scale-110 transition-transform"></lucide-icon>
+      <span class="font-medium">Intelligent Roadmap</span>
+    </a>
+  </nav>
+
+  <!-- Bottom Actions -->
+  <div class="p-4 border-t border-gray-700 space-y-2">
+    <button
+      class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
+      <lucide-icon [img]="icons.Settings" class="w-5 h-5"></lucide-icon>
+      <span class="font-medium">Settings</span>
+    </button>
+    <div class="flex items-center space-x-3 px-4 py-3 mt-4">
+      <div
+        class="w-8 h-8 rounded-full bg-gradient-to-tr from-cibc-maroon to-red-500 flex items-center justify-center text-xs font-bold border border-white/20">
+        AS
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-white">Adarsh Sharma</span>
+        <span class="text-xs text-gray-400">Admin</span>
+      </div>
+    </div>
+  </div>
+</div>

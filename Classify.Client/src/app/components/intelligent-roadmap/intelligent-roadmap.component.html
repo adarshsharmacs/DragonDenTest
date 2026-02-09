@@ -1,0 +1,123 @@
+<div class="h-full flex flex-col space-y-8">
+
+    <!-- Header & Velocity -->
+    <div class="flex items-center justify-between bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <div>
+            <h1 class="text-2xl font-bold text-cibc-slate tracking-tight">Intelligent Roadmap</h1>
+            <p class="text-gray-500 text-sm">Real-time alignment across Jira, Azure DevOps, and Exchange.</p>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <div class="text-right">
+                <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Team Classify Live Velocity
+                </div>
+                <div class="text-3xl font-black text-cibc-maroon">{{ velocity }}%</div>
+            </div>
+            <div class="w-32 h-3 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-cibc-maroon transition-all duration-1000 ease-out" [style.width.%]="velocity">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Board Area -->
+    <div class="flex-1 overflow-x-auto">
+        <div class="flex gap-6 h-full min-w-max pb-4">
+
+            <!-- Column: To Do -->
+            <div class="w-80 flex flex-col gap-4">
+                <div class="flex items-center justify-between px-2">
+                    <span class="font-bold text-gray-700 bg-gray-100 px-3 py-1 rounded-lg">To Do</span>
+                    <span class="text-gray-400 text-sm font-medium">2</span>
+                </div>
+
+                <div *ngFor="let task of tasks" [class.hidden]="task.status !== 'todo'"
+                    class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all group relative border-l-4"
+                    [ngClass]="{'border-l-cibc-maroon': task.priority === 'high', 'border-l-transparent': task.priority === 'normal'}">
+                    <div class="flex justify-between items-start mb-2">
+                        <span
+                            class="inline-flex items-center justify-center p-1.5 rounded-md bg-gray-50 text-gray-600 group-hover:bg-cibc-maroon group-hover:text-white transition-colors">
+                            <lucide-icon [img]="getIconForType(task.type)" class="w-4 h-4"></lucide-icon>
+                        </span>
+                        <button (click)="togglePriority(task)"
+                            class="text-xs font-bold px-2 py-1 rounded border transition-colors"
+                            [ngClass]="{'bg-cibc-maroon text-white border-cibc-maroon': task.priority === 'high', 'bg-white text-gray-400 border-gray-200 hover:border-cibc-maroon hover:text-cibc-maroon': task.priority === 'normal'}">
+                            {{ task.priority === 'high' ? 'High Priority' : 'Normal' }}
+                        </button>
+                    </div>
+
+                    <h3 class="font-bold text-gray-800 mb-3 leading-snug">{{ task.title }}</h3>
+
+                    <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-50">
+                        <div class="flex items-center gap-2">
+                            <div
+                                class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">
+                                {{ task.assignee.charAt(0) }}</div>
+                            <span class="text-xs text-gray-500">{{ task.assignee }}</span>
+                        </div>
+                        <div class="text-xs font-medium flex items-center gap-1"
+                            [ngClass]="{'text-red-600 animate-pulse': task.priority === 'high', 'text-gray-400': task.priority === 'normal'}">
+                            <lucide-icon [img]="icons.Clock" class="w-3 h-3"></lucide-icon>
+                            {{ task.dueDate | date:'MMM d' }}
+                            <span *ngIf="task.priority === 'high'"
+                                class="ml-1 text-[10px] bg-red-100 px-1 rounded">UPDATED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column: In Progress -->
+            <div class="w-80 flex flex-col gap-4">
+                <div class="flex items-center justify-between px-2">
+                    <span class="font-bold text-gray-700 bg-blue-50 text-blue-700 px-3 py-1 rounded-lg">In
+                        Progress</span>
+                    <span class="text-gray-400 text-sm font-medium">1</span>
+                </div>
+
+                <div *ngFor="let task of tasks" [class.hidden]="task.status !== 'in-progress'"
+                    class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all group border-l-4 relative"
+                    [ngClass]="{'border-l-cibc-maroon': task.priority === 'high', 'border-l-transparent': task.priority === 'normal'}">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="inline-flex items-center justify-center p-1.5 rounded-md bg-blue-50 text-blue-600">
+                            <lucide-icon [img]="getIconForType(task.type)" class="w-4 h-4"></lucide-icon>
+                        </span>
+                        <button (click)="togglePriority(task)"
+                            class="text-xs font-bold px-2 py-1 rounded border transition-colors"
+                            [ngClass]="{'bg-cibc-maroon text-white border-cibc-maroon': task.priority === 'high', 'bg-white text-gray-400 border-gray-200 hover:border-cibc-maroon hover:text-cibc-maroon': task.priority === 'normal'}">
+                            {{ task.priority === 'high' ? 'High Priority' : 'Normal' }}
+                        </button>
+                    </div>
+
+                    <h3 class="font-bold text-gray-800 mb-3 leading-snug">{{ task.title }}</h3>
+
+                    <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-50">
+                        <div class="flex items-center gap-2">
+                            <div
+                                class="w-6 h-6 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold">
+                                {{ task.assignee.charAt(0) }}</div>
+                            <span class="text-xs text-gray-500">{{ task.assignee }}</span>
+                        </div>
+                        <div class="text-xs font-medium flex items-center gap-1 text-gray-400">
+                            <lucide-icon [img]="icons.Clock" class="w-3 h-3"></lucide-icon>
+                            {{ task.dueDate | date:'MMM d' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column: Done -->
+            <div class="w-80 flex flex-col gap-4 opacity-75">
+                <div class="flex items-center justify-between px-2">
+                    <span class="font-bold text-gray-700 bg-green-50 text-green-700 px-3 py-1 rounded-lg">Done</span>
+                    <span class="text-gray-400 text-sm font-medium">0</span>
+                </div>
+                <!-- Empty state or done tasks -->
+                <div
+                    class="h-32 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center text-gray-400 text-sm">
+                    No recently completed tasks
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
