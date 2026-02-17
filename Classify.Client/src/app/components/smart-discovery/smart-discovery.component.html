@@ -13,7 +13,7 @@
                     <lucide-icon [img]="icons.Search"
                         class="text-gray-400 group-focus-within:text-cibc-maroon transition-colors"></lucide-icon>
                 </div>
-                <input type="text" [(ngModel)]="searchText" (keydown.enter)="onSearch()"
+                <input type="text" [(ngModel)]="searchText" (keydown.enter)="onSearch()" id="smart-discovery-search"
                     class="block w-full pl-11 pr-24 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:ring-0 focus:border-cibc-maroon text-lg transition-all placeholder-gray-400 outline-none"
                     placeholder="Describe the report or data you need (e.g., TFSA accounts with high cash balances)...">
                 <div class="absolute inset-y-0 right-2 flex items-center">
