@@ -22,6 +22,13 @@
       <lucide-icon [img]="icons.Calendar" class="w-5 h-5 group-hover:scale-110 transition-transform"></lucide-icon>
       <span class="font-medium">Intelligent Roadmap</span>
     </a>
+
+    <!-- FAQ -->
+    <a routerLink="/faq" routerLinkActive="bg-cibc-maroon text-white shadow-md"
+      class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-all duration-200 group">
+      <lucide-icon [img]="icons.HelpCircle" class="w-5 h-5 group-hover:scale-110 transition-transform"></lucide-icon>
+      <span class="font-medium">FAQ</span>
+    </a>
   </nav>
 
   <!-- Bottom Actions -->
@@ -30,6 +37,11 @@
       class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
       <lucide-icon [img]="icons.Settings" class="w-5 h-5"></lucide-icon>
       <span class="font-medium">Settings</span>
+    </button>
+    <button (click)="toggleLanguage()"
+      class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
+      <lucide-icon [img]="icons.Globe" class="w-5 h-5"></lucide-icon>
+      <span class="font-medium">Language: {{ currentLang }}</span>
     </button>
     <div class="flex items-center space-x-3 px-4 py-3 mt-4">
       <div

@@ -24,6 +24,15 @@ export class SmartDiscoveryComponent {
 
   metadataTree = [
     {
+      name: 'World Net',
+      expanded: false,
+      children: [
+        { name: 'Quickfiles', type: 'Table' },
+        { name: 'TSL', type: 'Table' },
+        { name: 'RDC', type: 'Table' }
+      ]
+    },
+    {
       name: 'Mid Office Data',
       type: 'schema',
       expanded: true,

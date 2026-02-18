@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { ShellComponent } from './components/shell/shell.component';
 import { SmartDiscoveryComponent } from './components/smart-discovery/smart-discovery.component';
 import { IntelligentRoadmapComponent } from './components/intelligent-roadmap/intelligent-roadmap.component';
+import { FaqComponent } from './components/faq/faq.component';
 
 export const routes: Routes = [
     {
@@ -10,7 +11,8 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'discovery', pathMatch: 'full' },
             { path: 'discovery', component: SmartDiscoveryComponent },
-            { path: 'roadmap', component: IntelligentRoadmapComponent }
+            { path: 'roadmap', component: IntelligentRoadmapComponent },
+            { path: 'faq', component: FaqComponent }
         ]
     }
 ];

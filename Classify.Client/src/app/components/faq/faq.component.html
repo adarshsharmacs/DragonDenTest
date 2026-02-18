@@ -1,0 +1,62 @@
+<div class="h-full flex flex-col p-8 space-y-8">
+    <!-- Header -->
+    <div class="text-center space-y-4">
+        <div class="flex items-center justify-center gap-3">
+            <lucide-icon [img]="icons.HelpCircle" class="w-10 h-10 text-indigo-600"></lucide-icon>
+            <h1 class="text-4xl font-bold text-cibc-slate tracking-tight">Frequently Asked Questions</h1>
+        </div>
+        <p class="text-gray-500 max-w-2xl mx-auto">
+            Browse common questions by role to quickly find answers about our Mid Office Intelligence platform.
+        </p>
+    </div>
+
+    <!-- Role Selector -->
+    <div class="max-w-5xl mx-auto w-full">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Select Your Role</h2>
+            <div class="grid grid-cols-3 gap-3">
+                <button *ngFor="let role of roles" (click)="selectRole(role)"
+                    [class.bg-indigo-600]="selectedRole === role" [class.text-white]="selectedRole === role"
+                    [class.shadow-md]="selectedRole === role" [class.bg-gray-50]="selectedRole !== role"
+                    [class.text-gray-700]="selectedRole !== role" [class.hover:bg-gray-100]="selectedRole !== role"
+                    class="px-4 py-3 rounded-xl text-sm font-medium transition-all border border-transparent hover:border-indigo-200">
+                    {{ role }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ List -->
+    <div class="max-w-5xl mx-auto w-full flex-1 overflow-y-auto">
+        <div class="space-y-3">
+            <div *ngFor="let faq of currentFAQs"
+                class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md">
+                <button (click)="toggleFAQ(faq)"
+                    class="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors">
+                    <div class="flex items-start gap-3 flex-1">
+                        <lucide-icon [img]="faq.expanded ? icons.ChevronDown : icons.ChevronRight"
+                            class="w-5 h-5 text-indigo-600 mt-0.5 flex-shrink-0"></lucide-icon>
+                        <span class="font-medium text-gray-800">{{ faq.question }}</span>
+                    </div>
+                </button>
+                <div *ngIf="faq.expanded" class="px-5 pb-5 pt-2 bg-gray-50 border-t border-gray-100 animate-fade-in-up">
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        This is a demonstration FAQ. In production, this would connect to our AI Analyst to provide
+                        detailed,
+                        context-aware answers based on your Mid Office data and the specific question asked.
+                    </p>
+                    <div class="mt-4 flex gap-2">
+                        <button
+                            class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">
+                            Ask AI Analyst
+                        </button>
+                        <button
+                            class="px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors border border-gray-200">
+                            View Related Docs
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

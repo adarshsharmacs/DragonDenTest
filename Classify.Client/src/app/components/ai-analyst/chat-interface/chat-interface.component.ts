@@ -1,5 +1,5 @@
 
-import { Component, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewChecked, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AiAnalystService, AiResponse } from '../../../services/ai-analyst.service';
@@ -42,14 +42,32 @@ interface ChatMessage {
       <!-- Messages Area -->
       <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-white/40 backdrop-blur-sm" #scrollContainer>
         
-        <div *ngIf="messages.length === 0" class="flex flex-col items-center justify-center h-full text-center text-gray-500 space-y-4">
-          <div class="p-4 bg-white/50 rounded-full shadow-lg animate-pulse-glow">
-             <lucide-icon name="bot" class="w-12 h-12 text-indigo-500"></lucide-icon>
+        <div *ngIf="messages.length === 0" class="flex flex-col items-center justify-center h-full text-center text-gray-500 space-y-4 py-8">
+          <div class="p-4 bg-white/50 rounded-full shadow-lg animate-pulse-glow mb-2">
+             <lucide-icon name="bot" class="w-10 h-10 text-indigo-500"></lucide-icon>
           </div>
-          <p class="max-w-[200px]">Ask me about Trade Volumes, Risk Levels, or System Health.</p>
-           <div class="flex flex-wrap justify-center gap-2">
-            <button (click)="quickAsk('Show high risk trades')" class="px-3 py-1 bg-white/60 hover:bg-white rounded-full text-xs shadow-sm transition-all border border-indigo-100">High Risk Trades</button>
-            <button (click)="quickAsk('System health status')" class="px-3 py-1 bg-white/60 hover:bg-white rounded-full text-xs shadow-sm transition-all border border-indigo-100">System Status</button>
+          
+          <div *ngIf="!selectedRole" class="space-y-4 w-full px-8 animate-fade-in-up">
+              <h3 class="font-bold text-gray-700">Select your role to get started:</h3>
+              <div class="grid grid-cols-2 gap-2">
+                  <button *ngFor="let role of roles" (click)="selectRole(role)" 
+                          class="p-2 text-xs bg-white/60 hover:bg-white hover:text-indigo-600 border border-transparent hover:border-indigo-100 rounded-lg transition-all shadow-sm text-gray-600 font-medium">
+                      {{ role }}
+                  </button>
+              </div>
+          </div>
+
+          <div *ngIf="selectedRole" class="space-y-4 w-full px-6 animate-fade-in-up">
+              <div class="flex items-center justify-between">
+                  <h3 class="font-bold text-gray-700 text-sm">Suggested for {{ selectedRole }}:</h3>
+                  <button (click)="selectedRole = ''" class="text-xs text-indigo-500 hover:underline">Change Role</button>
+              </div>
+              <div class="flex flex-col gap-2">
+                  <button *ngFor="let q of roleQuestions" (click)="quickAsk(q)" 
+                          class="p-3 text-left text-xs bg-white/70 hover:bg-white border border-indigo-50 hover:border-indigo-200 rounded-xl transition-all shadow-sm hover:shadow-md text-gray-700">
+                      "{{ q }}"
+                  </button>
+              </div>
           </div>
         </div>
 
@@ -110,8 +128,9 @@ interface ChatMessage {
 
     <!-- Toggle Button (Floating Action Button) -->
     <button *ngIf="!isOpen" (click)="toggleChat()" id="ai-analyst-trigger"
-            class="fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 hover:scale-110 transition-all duration-300 flex items-center justify-center z-[9999] animate-bounce-slow">
-       <lucide-icon name="sparkles" class="w-7 h-7"></lucide-icon>
+            class="fixed bottom-6 right-6 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 hover:scale-105 transition-all duration-300 flex items-center gap-3 px-5 py-3 z-[9999] animate-bounce-slow group">
+       <lucide-icon name="sparkles" class="w-6 h-6"></lucide-icon>
+       <span class="font-semibold text-sm">AI Analyst</span>
     </button>
   `,
   styles: [`
@@ -124,7 +143,7 @@ interface ChatMessage {
     }
   `]
 })
-export class ChatInterfaceComponent implements AfterViewChecked {
+export class ChatInterfaceComponent implements AfterViewChecked, OnInit {
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
   isOpen = false;
@@ -132,7 +151,20 @@ export class ChatInterfaceComponent implements AfterViewChecked {
   isLoading = false;
   messages: ChatMessage[] = [];
 
+  roles: string[] = [];
+  selectedRole = '';
+  roleQuestions: string[] = [];
+
   constructor(private aiService: AiAnalystService) { }
+
+  ngOnInit() {
+    this.roles = this.aiService.getRoles();
+  }
+
+  selectRole(role: string) {
+    this.selectedRole = role;
+    this.roleQuestions = this.aiService.getQuestionsForRole(role);
+  }
 
   toggleChat() {
     this.isOpen = !this.isOpen;

@@ -14,7 +14,63 @@ export interface AiResponse {
 })
 export class AiAnalystService {
 
+    private roleQuestions: { [key: string]: string[] } = {
+        'Project Manager': [
+            'What is the impact of adding a new ISI Account range on existing reports?',
+            'Show me the project status for the Q3 release.',
+            'Are there any improved efficiencies in the trade processing workflow?'
+        ],
+        'Business Analyst': [
+            'I want to understand the flow of Market Mate application.',
+            'Show me the data lineage for the Client Master schema.',
+            'What are the dependencies for the new derivative product launch?'
+        ],
+        'Business Operations': [
+            'How many trades are pending manual review?',
+            'Show me the daily reconciliation report for yesterday.',
+            'Which accounts have the highest cash balance discrepancies?'
+        ],
+        'Product Owners': [
+            'What is the adoption rate of the new dashboard?',
+            'Show me the user feedback summary for the last sprint.',
+            'Are we meeting the SLA for report generation?'
+        ],
+        'Technology Stakeholders': [
+            'What is the current system uptime?',
+            'Are there any performance bottlenecks in the database?',
+            'Show me the API latency trends for the last 24 hours.'
+        ],
+        'Production Support': [
+            'I am a Production Support and want to know how many zena jobs failed today.',
+            'Show me the error logs for the last hour.',
+            'Are there any active alerts for the trading engine?'
+        ],
+        'Application Delivery': [
+            'What is the build status for the latest release?',
+            'Show me the deployment pipeline metrics.',
+            'Are there any flaky tests in the regression suite?'
+        ],
+        'BSA': [
+            'What data fields are required for the new compliance report?',
+            'Show me the mapping document for the legacy migration.',
+            'Validate the schema for the new transaction feed.'
+        ],
+        'WN Applications': [
+            'What is the status of the World Net gateway?',
+            'Show me the transaction volume for World Net today.',
+            'Are there any connectivity issues with the external payment providers?'
+        ]
+    };
+
     constructor(private mockDataService: MockDataService) { }
+
+    getRoles(): string[] {
+        return Object.keys(this.roleQuestions);
+    }
+
+    getQuestionsForRole(role: string): string[] {
+        return this.roleQuestions[role] || [];
+    }
 
     processQuery(query: string): Observable<AiResponse> {
         const lowerQuery = query.toLowerCase();
