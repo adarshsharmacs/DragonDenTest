@@ -5,6 +5,7 @@ import { AiAnalystService } from '../../services/ai-analyst.service';
 
 interface FAQItem {
     question: string;
+    answer: string;
     expanded: boolean;
 }
 
@@ -27,11 +28,13 @@ export class FaqComponent implements OnInit {
         this.roles = this.aiService.getRoles();
         // Initialize FAQs for each role
         this.roles.forEach(role => {
-            const questions = this.aiService.getQuestionsForRole(role);
-            this.faqsByRole[role] = questions.map(q => ({ question: q, expanded: false }));
+            const faqs = this.aiService.getFaqsForRole(role);
+            this.faqsByRole[role] = faqs.map(f => ({ ...f, expanded: false }));
         });
-        // Select first role by default
-        if (this.roles.length > 0) {
+        // Select Judges by default if available, otherwise first role
+        if (this.roles.includes('Judges')) {
+            this.selectedRole = 'Judges';
+        } else if (this.roles.length > 0) {
             this.selectedRole = this.roles[0];
         }
     }
