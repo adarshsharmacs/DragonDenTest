@@ -25,7 +25,7 @@ interface ChatMessage {
       <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 text-white flex justify-between items-center shadow-md">
         <div class="flex items-center gap-3">
           <div class="p-2 bg-white/20 rounded-full">
-            <lucide-icon name="sparkles" class="w-5 h-5 text-yellow-300"></lucide-icon>
+            <lucide-icon [img]="icons.Sparkles" class="w-5 h-5 text-yellow-300"></lucide-icon>
           </div>
           <div>
             <h2 class="font-bold text-lg">AI Analyst</h2>
@@ -44,7 +44,7 @@ interface ChatMessage {
         
         <div *ngIf="messages.length === 0" class="flex flex-col items-center justify-center h-full text-center text-gray-500 space-y-4 py-8">
           <div class="p-4 bg-white/50 rounded-full shadow-lg animate-pulse-glow mb-2">
-             <lucide-icon name="bot" class="w-10 h-10 text-indigo-500"></lucide-icon>
+             <lucide-icon [img]="icons.Bot" class="w-10 h-10 text-indigo-500"></lucide-icon>
           </div>
           
           <div *ngIf="!selectedRole" class="space-y-4 w-full px-8 animate-fade-in-up">
@@ -76,7 +76,7 @@ interface ChatMessage {
           <!-- Avatar -->
           <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm"
                [ngClass]="msg.sender === 'ai' ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-200 text-gray-600'">
-            <lucide-icon [name]="msg.sender === 'ai' ? 'bot' : 'user'" class="w-5 h-5"></lucide-icon>
+            <lucide-icon [img]="msg.sender === 'ai' ? icons.Bot : icons.User" class="w-5 h-5"></lucide-icon>
           </div>
 
           <!-- Message Bubble -->
@@ -99,7 +99,7 @@ interface ChatMessage {
         <!-- Loading Indicator -->
         <div *ngIf="isLoading" class="flex gap-3">
            <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center flex-shrink-0">
-             <lucide-icon name="bot" class="w-5 h-5"></lucide-icon>
+             <lucide-icon [img]="icons.Bot" class="w-5 h-5"></lucide-icon>
            </div>
            <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-1">
              <div class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
@@ -120,7 +120,7 @@ interface ChatMessage {
           <button type="submit" 
                   [disabled]="!currentInput.trim() || isLoading"
                   class="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-md">
-            <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
+            <lucide-icon [img]="icons.Send" class="w-4 h-4"></lucide-icon>
           </button>
         </form>
       </div>
@@ -129,7 +129,7 @@ interface ChatMessage {
     <!-- Toggle Button (Floating Action Button) -->
     <button *ngIf="!isOpen" (click)="toggleChat()" id="ai-analyst-trigger"
             class="fixed bottom-6 right-6 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 hover:scale-105 transition-all duration-300 flex items-center gap-3 px-5 py-3 z-[9999] animate-bounce-slow group">
-       <lucide-icon name="sparkles" class="w-6 h-6"></lucide-icon>
+       <lucide-icon [img]="icons.Sparkles" class="w-6 h-6"></lucide-icon>
        <span class="font-semibold text-sm">AI Analyst</span>
     </button>
   `,
@@ -146,6 +146,7 @@ interface ChatMessage {
 export class ChatInterfaceComponent implements AfterViewChecked, OnInit {
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
+  readonly icons = { Send, Bot, User, Sparkles };
   isOpen = false;
   currentInput = '';
   isLoading = false;
@@ -159,6 +160,16 @@ export class ChatInterfaceComponent implements AfterViewChecked, OnInit {
 
   ngOnInit() {
     this.roles = this.aiService.getRoles();
+    this.aiService.chatOpen$.subscribe(isOpen => {
+      this.isOpen = isOpen;
+    });
+
+    this.aiService.suggestedQuery$.subscribe(query => {
+      if (query) {
+        this.currentInput = query;
+        // Optionally auto-send if you want, but pre-filling is safer
+      }
+    });
   }
 
   selectRole(role: string) {
@@ -167,7 +178,7 @@ export class ChatInterfaceComponent implements AfterViewChecked, OnInit {
   }
 
   toggleChat() {
-    this.isOpen = !this.isOpen;
+    this.aiService.toggleChat();
   }
 
   quickAsk(query: string) {

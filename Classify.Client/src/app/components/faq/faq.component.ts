@@ -47,6 +47,14 @@ export class FaqComponent implements OnInit {
         faq.expanded = !faq.expanded;
     }
 
+    askAiAnalyst(faq: FAQItem) {
+        this.aiService.askAi(faq.question);
+    }
+
+    viewRelatedDocs() {
+        window.open('https://cibc.sharepoint.com/:w:/r/sites/pmowm/PWM/FISPhase2/Shared%2Documents/Classify/CIBC_ClassifyIntelligence_Suite_Proposal.docx?d=wf4f5843bd1f849309a831d15bfef7190&csf=1&web=1&e=xQbmom', '_blank');
+    }
+
     get currentFAQs(): FAQItem[] {
         return this.faqsByRole[this.selectedRole] || [];
     }

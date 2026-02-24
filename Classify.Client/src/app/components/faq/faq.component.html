@@ -44,11 +44,11 @@
                         {{ faq.answer }}
                     </p>
                     <div class="mt-4 flex gap-2">
-                        <button
+                        <button (click)="askAiAnalyst(faq)"
                             class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">
                             Ask AI Analyst
                         </button>
-                        <button
+                        <button (click)="viewRelatedDocs()"
                             class="px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors border border-gray-200">
                             View Related Docs
                         </button>

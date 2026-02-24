@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { Observable, of, delay, map } from 'rxjs';
+import { Observable, of, delay, map, BehaviorSubject } from 'rxjs';
 import { MockDataService, Trade, SystemHealth } from './mock-data.service';
 
 export interface FAQItem {
@@ -18,6 +18,12 @@ export interface AiResponse {
     providedIn: 'root'
 })
 export class AiAnalystService {
+
+    private chatOpenSubject = new BehaviorSubject<boolean>(false);
+    chatOpen$ = this.chatOpenSubject.asObservable();
+
+    private suggestedQuerySubject = new BehaviorSubject<string>('');
+    suggestedQuery$ = this.suggestedQuerySubject.asObservable();
 
     private roleFaqs: { [key: string]: FAQItem[] } = {
         'Judges': [
@@ -63,6 +69,19 @@ export class AiAnalystService {
 
     getQuestionsForRole(role: string): string[] {
         return (this.roleFaqs[role] || []).map(f => f.question);
+    }
+
+    toggleChat(isOpen?: boolean) {
+        if (isOpen !== undefined) {
+            this.chatOpenSubject.next(isOpen);
+        } else {
+            this.chatOpenSubject.next(!this.chatOpenSubject.value);
+        }
+    }
+
+    askAi(query: string) {
+        this.suggestedQuerySubject.next(query);
+        this.toggleChat(true);
     }
 
     processQuery(query: string): Observable<AiResponse> {
